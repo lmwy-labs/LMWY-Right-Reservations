@@ -12,6 +12,7 @@ class Reservation extends React.Component {
     render() {
         return (
             <div>
+                <title>Open Table Reservation System</title>
                 <Calendar />
             </div>
         )

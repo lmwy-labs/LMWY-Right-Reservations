@@ -3,16 +3,16 @@ body {
 }
 
 .calendar {
-    border: .5px solid grey;
+    border: .5px solid #d8d9db;
     width: 300px;
-    height: 350px;
-    background-color: lightgrey;
+    height: 330px;
+    background-color: #f1f2f4;
 }
 
 .month {
     text-align: center;
     font-weight: bold;
-    padding: 15px;
+    padding: 7.5px;
     padding-top: 25px;
 }
 
@@ -26,54 +26,26 @@ body {
 
 table {
     table-layout: fixed;
-    width: 100%;
-    padding: 15px;
+    width: 87%;
+    border-collapse: collapse;
     padding-top: 5px;
+    margin-left: 6%; 
 }
 
-td {
-    width: 16%;
+table thead tr {
+    font-size: 13px;
     text-align: center;
-    padding-right:1px;
-}
-/* table thead td:nth-child(1) {
-    width: 16%;
-    text-align: center;
-    padding-right: 2px;
-}
-table thead td:nth-child(2) {
-    width: 16%;
-    text-align: center;
-    padding-right: 2px;
-}
-table thead td:nth-child(3) {
-    width: 16%;
-    text-align: center;
-    padding-right: 2px;
-}
-table thead td:nth-child(5) {
-    width: 16%;
-    text-align: right;
-    padding-right: 2px;
-}
-table thead td:nth-child(6) {
-    width: 16%;
-    text-align: center;
-    padding-left: 4px;
-}
-table thead td:nth-child(7) {
-    width: 16%;
-    text-align: center;
-} */
-
-table tbody {
-    margin-top: 10px;
-    cellspacing: 0;
 }
 
 table tbody td {
+    background-color: white;
     padding: 9px;
     text-align: center;
-    border: .5px solid grey;
-    /* border-collapse: collapse; */
+    border: .5px solid#d8d9db;
 }
+
+td {
+    padding: 10px;
+
+}
+
