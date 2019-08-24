@@ -1,23 +1,4 @@
 const mysql = require('mysql');
-// const faker = require('faker');
-
-// schema
-// table: restaurants
-        // name
-        // max_seats
-        // time_opening
-        // time_closing
-// table: calendar
-        // restaurant_id
-        // restaurant_name
-        // location_city
-        // calendar_date
-        // calendar_time
-        // num_opening_seats
-        // num_reserved_seats
-// first generate 100 restaurants
-// for each restaurant, generate 3 calendar months of data
-// each day has calendar times, randomly generate opening and closing times, between 5pm and 11:30pm
 
 const connection = mysql.createConnection({
     host: 'localhost',
@@ -30,44 +11,37 @@ connection.connect(function(err) {
     console.log('connected to mysql');
 });
 
-const generateRestaurants = (cb) => {
-    var restaurants = [];
-    const time_hour_min = [0, .3]
-
+const generateReservations = (cb) => {
+    var reservations = [];
+    const time_hour_min = [0, .5]
     for (var i = 1; i < 101; i ++) {
         const name = 'r' + i;
         const max_seats = Math.floor(Math.random()*(100-30)+30);
-        const time_opening = (Math.floor(Math.random()*(19-17)+17) + time_hour_min[Math.floor(Math.random()*2)]) * 10000;
-        const time_closing = (Math.floor(Math.random()*(24-21)+21) + time_hour_min[Math.floor(Math.random()*2)]) * 10000;
-        const restaurant = [name, max_seats, time_opening, time_closing];
-        restaurants.push(restaurant);
+        const time_opening = (Math.floor(Math.random()*(19-17)+17) + time_hour_min[Math.floor(Math.random()*2)]);
+        const time_closing = (Math.floor(Math.random()*(24-21)+21) + time_hour_min[Math.floor(Math.random()*2)]);
+        const startDate = new Date('09/03/2019');
+        for (var j = 0; j < 60; j ++) {
+            var newDate = new Date(startDate.setDate(startDate.getDate() + 1));
+            // generate 30min interval slots
+            for (var k = time_opening; k < time_closing; k += .5) {
+                // generate random # open and reserved seats
+                var num_reserved_seats = Math.floor(Math.random()*(max_seats*.2) + (max_seats*.8));
+                var num_opening_seats = max_seats - num_reserved_seats;
+                var reservation = [name, time_opening*10000, time_closing*10000, newDate, k*10000, num_opening_seats, num_reserved_seats];
+                reservations.push(reservation);
+            }
+        }
     }
-    
-    connection.query({ sql: 'INSERT INTO restaurants (name, max_seats, time_opening, time_closing) VALUES ?', values: [restaurants]}, (err, results, fields) => {
+    connection.query({ sql: 'INSERT INTO reservations (restaurant_name, time_opening, time_closing, calendar_date, calendar_time, num_opening_seats, num_reserved_seats) VALUES ?', values: [reservations] }, (err, results, fields) => {
         if (err) return console.log(err);
-        cb(null, 'Generated Restaurants');
+        cb(null, 'Generated Reservations');
     });
 }
 
-generateRestaurants((err, data) => {
-    if (err) return console.log(err);
-    console.log(data);
-});
-
-const generateReservations = (cb) => {
-    // restaurant_id
-    // restaurant_name
-    // location_city
-    // calendar_date
-    // calendar_time
-    // num_opening_seats
-    // num_reserved_seats
-    for (var i = 1; i < 101; i ++) {
-        connection.query('')
-    }
-
-}
-
+generateReservations((err, data) => {
+        if (err) return console.log(err);
+        console.log(data);
+    });
 
 
 connection.end((err) => {
