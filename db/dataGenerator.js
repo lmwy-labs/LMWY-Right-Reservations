@@ -26,13 +26,13 @@ const generateReservations = (cb) => {
             for (var k = time_opening; k < time_closing; k += .5) {
                 // generate random # open and reserved seats
                 var num_reserved_seats = Math.floor(Math.random()*(max_seats*.2) + (max_seats*.8));
-                var num_opening_seats = max_seats - num_reserved_seats;
-                var reservation = [name, time_opening*10000, time_closing*10000, newDate, k*10000, num_opening_seats, num_reserved_seats];
+                var num_open_seats = max_seats - num_reserved_seats;
+                var reservation = [name, time_opening*10000, time_closing*10000, newDate, k*10000, num_open_seats, num_reserved_seats];
                 reservations.push(reservation);
             }
         }
     }
-    connection.query({ sql: 'INSERT INTO reservations (restaurant_name, time_opening, time_closing, calendar_date, calendar_time, num_opening_seats, num_reserved_seats) VALUES ?', values: [reservations] }, (err, results, fields) => {
+    connection.query({ sql: 'INSERT INTO reservations (name, time_opening, time_closing, calendar_date, calendar_time, num_open_seats, num_reserved_seats) VALUES ?', values: [reservations] }, (err, results, fields) => {
         if (err) return console.log(err);
         cb(null, 'Generated Reservations');
     });
@@ -41,10 +41,22 @@ const generateReservations = (cb) => {
 generateReservations((err, data) => {
         if (err) return console.log(err);
         console.log(data);
-    });
-
-
-connection.end((err) => {
-    if (err) return console.log(err);
-    console.log('disconnected from mysql')
 });
+
+const getReservation = (rname, date, cb) => {
+    var data = [rname, date];
+    var sql = 'SELECT id, calendar_time, num_open_seats FROM reservations WHERE name = ? AND calendar_date = ?'
+    connection.query(sql, data, (err, results) => {
+        if (err) return console.log(err);
+        cb(null, results);
+    });
+}
+
+// connection.end((err) => {
+//     if (err) return console.log(err);
+//     console.log('disconnected from mysql')
+// });
+
+module.exports = {
+    getReservation
+}
