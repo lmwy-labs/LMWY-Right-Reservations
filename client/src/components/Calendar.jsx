@@ -1,6 +1,39 @@
 import React from 'react';
+import styled from 'styled-components';
 import Month from './month.jsx';
 import September from '../../CalendarDummyData.js';
+
+const Cal = styled.div`
+    border: .5px solid #d8d9db;
+    width: 300px;
+    height: 340px;
+    background-color: #f1f2f4;
+`;
+
+const Table = styled.table`
+    table-layout: fixed;
+    width: 87%;
+    border-collapse: collapse;
+    padding-top: 5px;
+    margin-left: 6%; 
+`;
+
+const Tr = styled.tr`
+    font-size: 13px;
+    text-align: center;
+    color: #2d333f;
+`;
+
+const Td = styled.td`
+    background-color: white;
+    padding: 9px;
+    text-align: center;
+    border: .5px solid#d8d9db;
+`;
+
+const Wrapper = ({ message }) => {
+  return <StyledWrapper>{message}</StyledWrapper>
+}
 
 class Calendar extends React.Component {
     constructor(props) {
@@ -12,13 +45,12 @@ class Calendar extends React.Component {
 
     render() {
         return (
-            <div className="calendar">
-                <div className="calendarHeader">
+            <div>
+                <Cal>
                     <Month/>
-                </div>
-                <table className="table">
-                    <thead>
-                        <tr>
+                    <Table>
+                        <thead>
+                            <Tr>
                             <td>Sun</td>
                             <td>Mon</td>
                             <td>Tue</td>
@@ -26,26 +58,26 @@ class Calendar extends React.Component {
                             <td>Thu</td>
                             <td>Fri</td>
                             <td>Sat</td>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {September.map((week, i) => 
-                            <tr key={i}>
-                                <td>{week[0]}</td>
-                                <td>{week[1]}</td>
-                                <td>{week[2]}</td>
-                                <td>{week[3]}</td>
-                                <td>{week[4]}</td>
-                                <td>{week[5]}</td>
-                                <td>{week[6]}</td>
-                            </tr>
-                        )}
-                    </tbody>
-                </table>
+                            </Tr>
+                        </thead>
+                        <tbody>
+                            {September.map((week, i) => 
+                                <tr key={i}>
+                                    <Td>{week[0]}</Td>
+                                    <Td>{week[1]}</Td>
+                                    <Td>{week[2]}</Td>
+                                    <Td>{week[3]}</Td>
+                                    <Td>{week[4]}</Td>
+                                    <Td>{week[5]}</Td>
+                                    <Td>{week[6]}</Td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </Table>
+                </Cal>
             </div>
         )
     }
 }
 
 export default Calendar;
-
