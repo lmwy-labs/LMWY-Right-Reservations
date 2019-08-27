@@ -13,7 +13,7 @@ const Button = styled.button`
     border-radius: 50%;
     background-color: #f1f2f4; 
     outline: none;
-`;
+`
 &:active {
     outline: ${none}
 };
@@ -39,14 +39,8 @@ class Month extends React.Component {
                 September 2019
                 <NextMonth>&gt;</NextMonth>
             </CalHeader>
-            // <div className="month">
-            //     <button className="button prevMonth">L</button>
-            //     September 2019
-            //     <button className="button nextMonth">R</button>
-            // </div>
         )
     }
 }
 
 export default Month;
-
