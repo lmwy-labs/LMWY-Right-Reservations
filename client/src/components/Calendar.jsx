@@ -5,8 +5,8 @@ import September from '../../CalendarDummyData.js';
 
 const Cal = styled.div`
     border: .5px solid #d8d9db;
-    width: 300px;
-    height: 340px;
+    width: 292px;
+    height: 304px;
     background-color: #f1f2f4;
 `;
 
@@ -14,7 +14,7 @@ const Table = styled.table`
     table-layout: fixed;
     width: 87%;
     border-collapse: collapse;
-    padding-top: 5px;
+    padding-top: 2px;
     margin-left: 6%; 
 `;
 
@@ -26,7 +26,7 @@ const Tr = styled.tr`
 
 const Td = styled.td`
     background-color: white;
-    padding: 9px;
+    padding: 7px;
     text-align: center;
     border: .5px solid#d8d9db;
 `;
@@ -39,7 +39,7 @@ class Calendar extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-
+        
         }
     }
 
