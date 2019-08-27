@@ -7,4 +7,9 @@ var September = [
     [6,7,8,9,10,11,12]
 ];
 
+var Year = {
+    January: 31,
+    February: 28
+}
+
 export default September;
