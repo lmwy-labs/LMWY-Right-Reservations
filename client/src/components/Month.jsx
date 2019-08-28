@@ -4,24 +4,24 @@ import styled from 'styled-components';
 const CalHeader = styled.div`
     text-align: center;
     font-weight: bold;
-    padding: 7.5px;
-    padding-top: 25px;
+    padding-top: 20px;
 `;
 const Button = styled.button`
-    height: 30px;
-    width: 30px;
+    height: 32px;
+    width: 32px;
     border-radius: 50%;
     background-color: #f1f2f4; 
-    outline: none;
-`
-&:active {
-    outline: ${none}
-};
+    border: 1px solid #d8d9db;
+    font-size: 13px;
+    font-weight: bold;
+&:hover, :active {
+    border: 2px solid #da3743;
+}`;
 const PrevMonth = styled(Button)`
-    margin-right: 35px;
+    margin-right: 33px;
 `;
 const NextMonth = styled(Button)`
-    margin-left: 35px;
+    margin-left: 33px;
 `;
 
 class Month extends React.Component {

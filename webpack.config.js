@@ -11,11 +11,11 @@ module.exports = {
   module : {
     rules : [
       {
-        test : /jsx?$/,
+        test : /\.jsx$/,
         include : SRC_DIR,
-        loader : 'babel-loader',      
+        loader : 'babel-loader',
         options: {
-          presets: ['react', 'es2015']
+          presets: ['@babel/preset-react', '@babel/preset-env']
         }
       }
     ]
