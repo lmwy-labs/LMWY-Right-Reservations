@@ -28,8 +28,18 @@ const PartyLabel = styled.div`
     margin-left: 15px;
     font-weight: bold;
 `;
+const PartyDiv = styled.div`
+    display: flex;
+`;
+const PartyFor = styled.div`
+    display: absolute;
+    padding-top: 10px;
+    padding-left: 15px;
+    font-size: 14px;
+    font-weight: none;
+`;
 const PartySelect = styled.select`
-    margin-left: 15px;
+    margin-left: -22px;
     margin-bottom: 12px;
     width: 93%;
     background-color: white;
@@ -38,6 +48,7 @@ const PartySelect = styled.select`
     -webkit-border-radius: 0px;
     padding-top: 10px;
     padding-bottom: 10px;
+    padding-left: 27px;
     border: none;
     border-bottom: 1px solid #BFBFBF;
     font-size: 14px;
@@ -63,7 +74,7 @@ const DateTimeLabel = styled.div`
 `;
 const DateChooser = styled.select`
     margin-left: 15px;
-    // margin-bottom: 12px;
+    margin-bottom: 12px;
     width: 43%;
     background-color: white;
     -moz-appearance:none;
@@ -109,7 +120,7 @@ const TimeSelect = styled.select`
 `;
 const CalPopup = styled.div`
     position: absolute;
-    margin-top: -11px;
+    margin-top: -12.5px;
     margin-left: 15px;
 `;
 const FindTable = styled.button`
@@ -163,11 +174,14 @@ class Reservation extends React.Component {
                         <PartyLabel>
                             Party Size
                         </PartyLabel>
-                        <PartySelect value={this.state.partySize} onChange={this.selectPartySize}>
-                            {this.state.partyArray.map((num, i) => (
-                                <option key={i} value={num}>{num}</option>
-                            ))}
-                        </PartySelect>
+                        <PartyDiv>
+                            <PartyFor>For </PartyFor>
+                            <PartySelect value={this.state.partySize} onChange={this.selectPartySize}>
+                                {this.state.partyArray.map((num, i) => (
+                                    <option key={i} value={num}>{num}</option>
+                                ))}
+                            </PartySelect>
+                        </PartyDiv>
                         <DateTime>
                             <DateTimeLabel>
                                 Date
