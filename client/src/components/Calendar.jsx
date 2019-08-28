@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import Month from './month.jsx';
-import September from '../../CalendarDummyData.js';
 
 const Cal = styled.div`
     border: .5px solid #d8d9db;
@@ -9,6 +8,7 @@ const Cal = styled.div`
     height: 304px;
     background-color: #f1f2f4;
 `;
+Cal.displayName = 'Cal';
 
 const Table = styled.table`
     table-layout: fixed;
@@ -30,6 +30,7 @@ const Td = styled.td`
     text-align: center;
     border: .5px solid#d8d9db;
 `;
+Td.displayName = 'Td'
 
 const Wrapper = ({ message }) => {
   return <StyledWrapper>{message}</StyledWrapper>
@@ -61,7 +62,7 @@ class Calendar extends React.Component {
                             </Tr>
                         </thead>
                         <tbody>
-                            {September.map((week, i) => 
+                            {this.props.September.map((week, i) => 
                                 <tr key={i}>
                                     <Td>{week[0]}</Td>
                                     <Td>{week[1]}</Td>

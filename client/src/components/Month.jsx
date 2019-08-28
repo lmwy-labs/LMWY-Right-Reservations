@@ -6,6 +6,7 @@ const CalHeader = styled.div`
     font-weight: bold;
     padding-top: 20px;
 `;
+CalHeader.displayName = 'CalHeader';
 const Button = styled.button`
     height: 32px;
     width: 32px;

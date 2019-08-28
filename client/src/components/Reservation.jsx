@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Calendar from './Calendar.jsx';
+import September from '../../CalendarDummyData.js';
 
 const ReserveForm = styled.div`
     width: 264px;
@@ -62,6 +63,7 @@ const PartySelect = styled.select`
     cursor: pointer;
 }
 `;
+PartySelect.displayName = 'PartySelect';
 const DateTime = styled.div`
     display: flex;
 `;
@@ -95,6 +97,7 @@ const DateChooser = styled.select`
     cursor: pointer;
 }
 `
+DateChooser.displayName = 'DateChooser';
 const TimeSelect = styled.select`
     margin-left: 15px;
     margin-bottom: 12px;
@@ -118,6 +121,7 @@ const TimeSelect = styled.select`
     cursor: pointer;
 }
 `;
+TimeSelect.displayName = 'TimeSelect';
 const CalPopup = styled.div`
     position: absolute;
     margin-top: -12.5px;
@@ -138,6 +142,7 @@ const FindTable = styled.button`
     cursor: pointer;
 }
 `;
+FindTable.displayName = 'FindTable';
 
 class Reservation extends React.Component {
     constructor(props) {
@@ -192,7 +197,7 @@ class Reservation extends React.Component {
                         </DateTime>
                         <DateChooser onClick={this.showCalendar}></DateChooser>
                             <CalPopup>
-                                {this.state.showCalendar ? <Calendar /> : null}
+                                {this.state.showCalendar ? <Calendar calendarDates={September}/> : null}
                             </CalPopup>
                         <TimeSelect>
                             <option>1</option>
