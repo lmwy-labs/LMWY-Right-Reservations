@@ -12,7 +12,7 @@
     "start": "node server/index.js",
     "start:dev": "nodemon server/index.js -w server -w database-mysql",
     "seed": "node db/dataGenerator.js",
-    "test": "jest"
+    "test": "jest --coverage"
   },
   "dependencies": {
     "babel-plugin-styled-components": "^1.10.6",
