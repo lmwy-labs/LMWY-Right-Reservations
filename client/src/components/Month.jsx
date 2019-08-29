@@ -28,9 +28,6 @@ const NextMonth = styled(Button)`
 class Month extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-
-        }
     }
 
     render() {

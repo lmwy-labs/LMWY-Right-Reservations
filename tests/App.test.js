@@ -23,10 +23,26 @@ describe('<Reservation/>', () => {
         const wrapper = shallow(<Reservation />);
         wrapper.setState({showCalendar: false});
         expect(wrapper.find(Calendar).exists()).toBe(false);
-    })
+    });
     test('It should display calendar component when showCalendar state is true', () => {
         const wrapper = shallow(<Reservation />);
         wrapper.setState({showCalendar: true});
         expect(wrapper.find(Calendar).exists()).toBe(true);
-    })
+    });
+    test('It should set party size state based on party size selection', () => {
+        const wrapper = shallow(<Reservation />);
+        const PartySelect = wrapper.find('PartySelect').at(0);
+
+        PartySelect.simulate('change', {target: { value : 4}});
+        wrapper.setState({showCalendar: true});
+        expect(wrapper.state().partySize).toEqual(4);
+    });
 });
+
+describe('<Calendar/>', () => {
+    test('Calendar should take in props', () => {
+        const wrapper = shallow(<Calendar />);
+        wrapper.setProps({calendarDates: [[1,2,3,4,5,6,7]]});
+        expect(wrapper.props('calendarDates')).toEqual(3);
+    })
+})
