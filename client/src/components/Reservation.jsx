@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import moment from 'moment';
 import Calendar from './Calendar.jsx';
 import September from '../../CalendarDummyData.js';
 
@@ -149,11 +150,37 @@ class Reservation extends React.Component {
         super(props);
         this.state = {
             showCalendar: false,
-            partySize: "For 4",
-            partyArray: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+            partySize: 0,
+            partyArray: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],
+            date: '',
+            time: {},
+            timeArray: []
         }
+        this.componentDidMount = this.componentDidMount.bind(this);
         this.selectPartySize = this.selectPartySize.bind(this);
+        this.selectDate = this.selectDate.bind(this);
+        this.selectTime = this.selectTime.bind(this);
         this.showCalendar = this.showCalendar.bind(this);
+    }
+
+    componentDidMount() {
+        const locale = 'en'; // or whatever you want...
+        const times = [];
+        
+        moment.locale(locale);  // optional - can remove if you are only dealing with one locale
+        
+        for(let hour = 0; hour < 24; hour++) {
+            times.push(moment({ hour }).format('h:mm A'));
+            times.push(
+                moment({
+                    hour,
+                    minute: 30
+                }).format('h:mm A')
+            );
+        }
+        this.setState({
+            timeArray: times
+        })
     }
 
     selectPartySize(e) {
@@ -161,7 +188,16 @@ class Reservation extends React.Component {
             partySize: e.target.value
         })
     }
-
+    selectDate(date) {
+        this.setState({
+            date: date
+        })
+    }
+    selectTime(e) {
+        this.setState({
+            time: e.target.value
+        })
+    }
     showCalendar() {
         this.setState((state) => ({
             showCalendar: !state.showCalendar
@@ -197,12 +233,12 @@ class Reservation extends React.Component {
                         </DateTime>
                         <DateChooser onClick={this.showCalendar}></DateChooser>
                             <CalPopup>
-                                {this.state.showCalendar ? <Calendar calendarDates={September}/> : null}
+                                {this.state.showCalendar ? <Calendar selectDate={this.selectDate} calendarDates={September}/> : null}
                             </CalPopup>
                         <TimeSelect>
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
+                            {this.state.timeArray.map((time, i) => (
+                                    <option key={i} value={time}>{time}</option>
+                            ))}
                         </TimeSelect>
                         <FindTable>Find a Table</FindTable>
                     </ReservationForms>

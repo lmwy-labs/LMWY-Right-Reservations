@@ -33,6 +33,12 @@ Td.displayName = 'Td';
 class Calendar extends React.Component {
     constructor(props) {
         super(props);
+        
+        this.dateOnClick = this.dateOnClick.bind(this);
+    }
+
+    dateOnClick(e) {
+        this.props.selectDate(e.target.innerHTML);
     }
 
     render() {
@@ -54,7 +60,7 @@ class Calendar extends React.Component {
                         </thead>
                         <tbody>
                             {this.props.calendarDates.map((week, i) => 
-                                <tr key={i}>
+                                <tr key={i} onClick={this.dateOnClick}>
                                     <Td>{week[0]}</Td>
                                     <Td>{week[1]}</Td>
                                     <Td>{week[2]}</Td>
