@@ -29,6 +29,14 @@ describe('<Reservation/>', () => {
         wrapper.setState({showCalendar: true});
         expect(wrapper.find(Calendar).exists()).toBe(true);
     });
+    // test('It should pass down props to the Calendar component', () => {
+    //     const wrapper = shallow(<Reservation />);
+    //     wrapper.setState({showCalendar: true});
+
+    //     const calendar = shallow(<Calendar />);
+    //     wrapper.setProps({calendarDates: [[1,2,3,4,5,6,7]]});
+    //     expect(calendar.props('calendarDates')).toEqual(1);
+    // })
     test('It should set party size state based on party size selection', () => {
         const wrapper = shallow(<Reservation />);
         const PartySelect = wrapper.find('PartySelect').at(0);
@@ -41,8 +49,7 @@ describe('<Reservation/>', () => {
 
 describe('<Calendar/>', () => {
     test('Calendar should take in props', () => {
-        const wrapper = shallow(<Calendar />);
-        wrapper.setProps({calendarDates: [[1,2,3,4,5,6,7]]});
-        expect(wrapper.props('calendarDates')).toEqual(3);
+        const wrapper = mount(<Calendar calendarDates={[[1,2,3,4,5,6,7]]}/>);
+        expect(wrapper.props().calendarDates).toEqual( [[1,2,3,4,5,6,7]] );
     })
 })
