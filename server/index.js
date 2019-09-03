@@ -1,14 +1,13 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-const db = require('../db/dataGenerator.js');
+const db = require('../db/generateReservations.js');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.use('/restaurants/:rid', express.static(__dirname + '/../public'));
 
-// TEST API CALL
 app.get('/api/restaurants/:rid/reservations', (req, res) => {
     var restaurant = req.params.rid;
     var date = req.query.date;

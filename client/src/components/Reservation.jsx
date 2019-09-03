@@ -12,10 +12,11 @@ import Calendar from './Calendar.jsx';
 /******************** STYLED COMPONENTS ********************/
 const ReserveForm = styled.div`
     width: 300px;
-    height: 306px;
+    height: 326px;
     background-color: white;
     box-shadow: 0px 0px 6px #BFBFBF;
     margin: 50px;
+    font-family: BrandTextRegular;
     font-family: -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans';
 `;
 const FormTitle = styled.div`
@@ -151,6 +152,7 @@ const CalPopup = styled.div`
     position: absolute;
     margin-top: 34px;
     margin-left: 18px;
+    z-index: 2;
 `;
 const FindTable = styled.button`
     margin-left: 18px;
@@ -177,21 +179,42 @@ const BookedNumTimes = styled.div`
     font-size: 14px;
 `;
 const Bookings = styled.div`
+    // display: absolute;
+`;
+const BookingLabel = styled.div`
+    font-size: 16px;
+    margin-left: 18px;
+    text-align: left;
+    font-weight: bold;
+    margin-bottom: 10px;
+`;
+const BookingButtons = styled.div`
+    position: relative;
+    box-sizing: border-box;
     margin-left: 18px;
     display: flex;
-    width: 95%;
-    align-self: center;
-`;
-const BookingTime = styled.div`
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 93%;
+    align-content: space-around;
+    `;
+const BookingButton = styled.div`
+    width: 29%;
+    height: 32px;
     margin-right: 10px;
-    padding: 10px;
+    margin-bottom: 10px;
     border-radius: 3%;
     background-color: #da3743;
     color: white;
     font-size: 14px;
 &:hover {
+    cursor: pointer;
     opacity: 0.8;
 }
+`;
+const BookingTime = styled.div`
+    padding-top: 7px;
+    text-align: center;
 `;
 
 /******************** ADDITIONAL FUNCTIONS ********************/
@@ -242,7 +265,7 @@ class Reservation extends React.Component {
             currentMonth: '',
             currentYear: '',
             currentMonthDates: [],
-            selectedDate: 'Mon, 9/2'
+            selectedDate: ''
         }
         this.calendar = React.createRef();
         this.handleClickOutside = this.handleClickOutside.bind(this);
@@ -266,12 +289,14 @@ class Reservation extends React.Component {
     }      
     componentDidMount() {
         var date = new Date;
+        var dayOfWeek = moment().format('ddd');
         this.setState({
             date: date.getFullYear() + '-' + (Number(date.getMonth())+1) + '-' + date.getDay(),
             currentMonth: date.getMonth(),
             currentYear: date.getFullYear(),
             time: '7:00 PM',
-            partySize: 4
+            partySize: 4,
+            selectedDate: '' + dayOfWeek + ', ' + (Number(date.getMonth())+1) + '/' + date.getDay()
         }, () => {
             this.generateMonth();
         });
@@ -288,21 +313,24 @@ class Reservation extends React.Component {
     }
     selectPartySize(e) {
         this.setState({
-            partySize: e.target.value
+            partySize: e.target.value,
+            showBookings: false
         })
     }
     selectDate(date) {
         this.setState({
             date: date[0],
             currentMonth: date[1] - 1,
-            selectedDate: date[2]
+            selectedDate: date[2],
+            showBookings: false
         }, () => {
             this.generateMonth();
         })
     }
     selectTime(e) {
         this.setState({
-            time: e.target.value
+            time: e.target.value,
+            showBookings: false
         })
     }
     showCalendar() {
@@ -331,18 +359,18 @@ class Reservation extends React.Component {
     }
     findReservation() {
         var twentyFourTime = moment(this.state.time, ['h:m a', 'H:m']).format('HH:mm')
-        var timeLower = moment(this.state.time, ['h:m a', 'H:m']).subtract(1.5, 'hours').format('HH:mm')
-        var timeUpper = moment(this.state.time, ['h:m a', 'H:m']).add(1.5, 'hours').format('HH:mm')
+        var timeLower = moment(this.state.time, ['h:m a', 'H:m']).subtract(1.25, 'hours').format('HH:mm')
+        var timeUpper = moment(this.state.time, ['h:m a', 'H:m']).add(1.25, 'hours').format('HH:mm')
         var req = { partySize: this.state.partySize, date: this.state.date, time: twentyFourTime, timeLower: timeLower, timeUpper: timeUpper };
+        console.log(req);
         $.get(`/api${this.props.path}reservations`, req, (data) => {
             var times = [];
             data.forEach((res) => times.push(moment(res.calendar_time, ['HH:mm:ss']).format('h:mm A')));
-            console.log(data)
             this.setState({
                 showBookings: true,
                 bookings: times
-            })
-        })
+            });
+        });
     }
 
     render() {
@@ -389,9 +417,14 @@ class Reservation extends React.Component {
                         {this.state.showBookings ? null : <FindTable onClick={this.findReservation}>Find a Table</FindTable>}
                         {this.state.showBookings ? null : <BookedNumTimes>Booked 4 times today</BookedNumTimes>}
                     </ReservationForms>
-                    <Bookings>
-                        {this.state.showBookings ? this.state.bookings.map((time, i) => <BookingTime key={i}>{time}</BookingTime>) : null }
-                    </Bookings>
+                        <Bookings>
+                            {this.state.showBookings ? <BookingLabel>Select a time:</BookingLabel> : null} 
+                            <BookingButtons>
+                                {this.state.showBookings ? this.state.bookings.map((time, i) => 
+                                        <BookingButton key={i}> <BookingTime>{time}</BookingTime> </BookingButton>        
+                                ) : null }
+                            </BookingButtons>
+                        </Bookings>
                 </ReserveForm>
             </div>
         )
