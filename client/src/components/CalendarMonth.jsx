@@ -37,7 +37,7 @@ class Month extends React.Component {
         return (
             <CalHeader>
                 <PrevMonth onClick={this.props.changePrevMonth}>&lt;</PrevMonth>
-                {this.props.monthName} 2019
+                {this.props.monthName} {this.props.currentYear}
                 <NextMonth onClick={this.props.changeNextMonth}>&gt;</NextMonth>
             </CalHeader>
         )

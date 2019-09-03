@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import moment from 'moment';
-import Month from './month.jsx';
+import Month from './CalendarMonth.jsx';
 
 /******************** STYLED COMPONENTS ********************/
 const Cal = styled.div`
@@ -39,30 +38,10 @@ Td.displayName = 'Td';
 class Calendar extends React.Component {
     constructor(props) {
         super(props);
-
         this.state = {
             monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ]
         };
-        this.calendar = React.createRef();
-        
-        this.handleClickOutside = this.handleClickOutside.bind(this);
-        this.componentDidMount = this.componentDidMount.bind(this);
-        this.componentWillUnmount = this.componentWillUnmount.bind(this);
-        this.dateOnClick = this.dateOnClick.bind(this);
-    }
-
-    handleClickOutside(event) {
-        if (!this.calendar.current.contains(event.target)) {
-          this.props.showCalendar();
-        }
-      }
-
-    componentDidMount() {
-        document.addEventListener('mousedown', this.handleClickOutside, false);
-    }
-
-    componentWillUnmount() {
-        document.removeEventListener('mousedown', this.handleClickOutside, false);
+       this.dateOnClick = this.dateOnClick.bind(this);
     }
 
     dateOnClick(e) {
@@ -70,14 +49,15 @@ class Calendar extends React.Component {
         // console.log(date);
         console.log(e.target.value)
         console.log(e.target.innerHTML)
-
-        this.props.selectDate(date);
+        
+        this.props.selectDate([date, 'Wed, 9/24']);
+        // this.props.closeCalendar();
     }
 
     render() {
         return (
             <div>
-                <Cal ref={this.calendar}>
+                <Cal>
                     <Month monthName={this.state.monthNames[this.props.currentMonth]} changePrevMonth={this.props.changePrevMonth} changeNextMonth={this.props.changeNextMonth} currentYear={this.props.currentYear}/>
                     <Table>
                         <thead>

@@ -2,11 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 import moment from 'moment';
 import Calendar from './Calendar.jsx';
-import September from '../../CalendarDummyData.js';
 
 /******************** STYLED COMPONENTS ********************/
 const ReserveForm = styled.div`
-    width: 286px;
+    width: 300px;
     height: 306px;
     background-color: white;
     box-shadow: 0px 0px 6px #BFBFBF;
@@ -14,9 +13,9 @@ const ReserveForm = styled.div`
 `;
 const FormTitle = styled.div`
     font-size: 19px;
-    margin: 15px;
-    padding-top: 15px;
-    padding-bottom: 15px;
+    margin: 18px;
+    padding-top: 12.5px;
+    padding-bottom: 12.5px;
     border-bottom: 1px solid #BFBFBF;
     text-align: center;
     font-weight: bold;
@@ -28,7 +27,7 @@ const ReservationForms = styled.div`
 const PartyLabel = styled.div`
     font-size: 14px;
     height: 22px;
-    margin-left: 15px;
+    margin-left: 18px;
     font-weight: bold;
 `;
 const PartyDiv = styled.div`
@@ -36,20 +35,20 @@ const PartyDiv = styled.div`
 `;
 const PartyFor = styled.div`
     display: absolute;
-    padding-top: 10px;
-    padding-left: 15px;
+    padding-top: 5px;
+    padding-left: 18px;
     font-size: 14px;
     font-weight: none;
 `;
 const PartySelect = styled.select`
     margin-left: -22px;
     margin-bottom: 12px;
-    width: 93%;
+    width: 94%;
     background-color: white;
     -moz-appearance:none;
     -webkit-appearance: none;
     -webkit-border-radius: 0px;
-    padding-top: 10px;
+    padding-top: 5px;
     padding-bottom: 10px;
     padding-left: 27px;
     border: none;
@@ -69,6 +68,7 @@ const PartySelect = styled.select`
 PartySelect.displayName = 'PartySelect';
 const DateTime = styled.div`
     display: flex;
+    width: 100%;
 `;
 const DateTimeLabel = styled.div`
     font-size: 14px;
@@ -77,15 +77,19 @@ const DateTimeLabel = styled.div`
     margin-left: 18px;
     font-weight: bold;
 `;
-const DateChooser = styled.select`
-    margin-left: 15px;
+const DateDiv = styled.div`
+    width: 100%;
+    display: flex;
+`;
+const DateChooser = styled.div`
+    margin-left: -115px;
     margin-bottom: 12px;
-    width: 43%;
+    width: 100%;
     background-color: white;
     -moz-appearance:none;
     -webkit-appearance: none;
     -webkit-border-radius: 0px;
-    padding-top: 10px;
+    padding-top: 5px;
     padding-bottom: 10px;
     border: none;
     border-bottom: 1px solid #BFBFBF;
@@ -102,15 +106,24 @@ const DateChooser = styled.select`
 }
 `
 DateChooser.displayName = 'DateChooser';
+const SelectedDate = styled.div`
+    display: absolute;
+    padding-top: 5px;
+    padding-left: 18px;
+    font-size: 14px;
+    font-weight: none;
+    width: 100%;
+`;
 const TimeSelect = styled.select`
-    margin-left: 15px;
+    margin-left: 18px;
     margin-bottom: 12px;
-    width: 43%;
+    margin-right: 4px;
+    width: 93%;
     background-color: white;
     -moz-appearance:none;
     -webkit-appearance: none;
     -webkit-border-radius: 0px;
-    padding-top: 10px;
+    padding-top: 5px;
     padding-bottom: 10px;
     border: none;
     border-bottom: 1px solid #BFBFBF;
@@ -129,11 +142,11 @@ const TimeSelect = styled.select`
 TimeSelect.displayName = 'TimeSelect';
 const CalPopup = styled.div`
     position: absolute;
-    margin-top: 39px;
-    margin-left: 15px;
+    margin-top: 34px;
+    margin-left: 18px;
 `;
 const FindTable = styled.button`
-    margin-left: 15px;
+    margin-left: 18px;
     margin-top: 5px;
     width: 93%
     height: 47px;
@@ -194,18 +207,29 @@ class Reservation extends React.Component {
             timeArray: reservationTimes,
             currentMonth: '',
             currentYear: '',
-            currentMonthDates: []
+            currentMonthDates: [],
+            selectedDate: 'Wed, 9/4'
         }
+        this.calendar = React.createRef();
+        this.handleClickOutside = this.handleClickOutside.bind(this);
         this.componentDidMount = this.componentDidMount.bind(this);
+        this.componentWillUnmount = this.componentWillUnmount.bind(this);
         this.generateMonth = this.generateMonth.bind(this);
         this.selectPartySize = this.selectPartySize.bind(this);
         this.selectDate = this.selectDate.bind(this);
         this.selectTime = this.selectTime.bind(this);
         this.showCalendar = this.showCalendar.bind(this);
+        this.closeCalendar = this.closeCalendar.bind(this);
         this.changePrevMonth = this.changePrevMonth.bind(this);
         this.changeNextMonth = this.changeNextMonth.bind(this);
     }
 
+    handleClickOutside(event) {
+        if (!this.calendar.current.contains(event.target)) {
+            console.log('outside event')
+            this.closeCalendar();
+        }
+    }      
     componentDidMount() {
         var date = new Date;
         this.setState({
@@ -214,15 +238,17 @@ class Reservation extends React.Component {
         }, () => {
             this.generateMonth();
         });
+        document.addEventListener('mousedown', this.handleClickOutside, false);
     }
-
+    componentWillUnmount() {
+        document.removeEventListener('mousedown', this.handleClickOutside, false);
+    }
     generateMonth() {
         const dates = generateMonthlyDates(this.state.currentMonth, this.state.currentYear);
         this.setState({
             currentMonthDates: dates
         })
     }
-
     selectPartySize(e) {
         this.setState({
             partySize: e.target.value
@@ -242,7 +268,12 @@ class Reservation extends React.Component {
     showCalendar() {
         this.setState((state) => ({
             showCalendar: !state.showCalendar
-        }))
+        }));
+    }
+    closeCalendar() {
+        this.setState({
+            showCalendar: false
+        })
     }
     changePrevMonth() {
         this.setState({
@@ -251,7 +282,6 @@ class Reservation extends React.Component {
             this.generateMonth();
         });
     }
-
     changeNextMonth() {
         this.setState({
             currentMonth: this.state.currentMonth + 1
@@ -259,7 +289,6 @@ class Reservation extends React.Component {
             this.generateMonth();
         })
     }
-
 
     render() {
         return (
@@ -289,12 +318,13 @@ class Reservation extends React.Component {
                             </DateTimeLabel>
                         </DateTime>
                         <DateTime>
-
-                            <DateChooser onClick={this.showCalendar}></DateChooser>
-                                <option></option>
-                                <CalPopup ref={(node) => this.setWrapperRef = node}>
-                                    {this.state.showCalendar ? <Calendar changeNextMonth={this.changeNextMonth} changePrevMonth={this.changePrevMonth} currentMonthDates={this.state.currentMonthDates} currentMonth={this.state.currentMonth} currentYear={this.state.currentMonth}  showCalendar={this.showCalendar} selectDate={this.selectDate}/> : null}
-                                </CalPopup>
+                            <DateDiv ref={this.calendar}>
+                                <SelectedDate>{this.state.selectedDate}</SelectedDate>
+                                <DateChooser onClick={this.showCalendar}></DateChooser>
+                                    <CalPopup>
+                                        {this.state.showCalendar ? <Calendar changeNextMonth={this.changeNextMonth} changePrevMonth={this.changePrevMonth} currentMonthDates={this.state.currentMonthDates} currentMonth={this.state.currentMonth} currentYear={this.state.currentYear}  closeCalendar={this.closeCalendar} selectDate={this.selectDate}/> : null}
+                                    </CalPopup>
+                            </DateDiv>
                             <TimeSelect value={this.state.time} onChange={this.selectTime}>
                                 {this.state.timeArray.map((time, i) => (
                                     <option key={i} value={time}>{time}</option>
