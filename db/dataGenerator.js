@@ -15,7 +15,7 @@ const generateReservations = (numOfMonths, cb) => {
 
     const generateByMonth = (startDate) => {
         var reservations = [];
-        const time_hour_min = [0, .5];
+        const time_hour_min = [0, .3];
         for (var i = 1; i < 101; i ++) {
             const name = 'r' + i;
             const max_seats = Math.floor(Math.random()*(100-30)+30);
@@ -31,9 +31,11 @@ const generateReservations = (numOfMonths, cb) => {
                 // generate 30min interval slots
                 for (var k = time_opening; k < time_closing; k += .5) {
                     // generate random # open and reserved seats
-                    var num_reserved_seats = Math.floor(Math.random()*(max_seats*.2) + (max_seats*.8));
+                    var num_reserved_seats = Math.floor(Math.random()*(max_seats*.15) + (max_seats*.85));
                     var num_open_seats = max_seats - num_reserved_seats;
-                    var reservation = [name, time_opening*10000, time_closing*10000, newDate, k*10000, num_open_seats, num_reserved_seats];
+                    var timeMinute = time_hour_min[k * 10 % 2];
+                    var time = Math.floor(k) + timeMinute;
+                    var reservation = [name, time_opening*10000, time_closing*10000, newDate, time*10000, num_open_seats, num_reserved_seats];
                     reservations.push(reservation);
                 }
             }
@@ -52,15 +54,15 @@ const generateReservations = (numOfMonths, cb) => {
     }
 }
 
-generateReservations(3, (err, message) => {
-    if (err) return console.log(err);
-    console.log(message);
-});
+// generateReservations(3, (err, message) => {
+//     if (err) return console.log(err);
+//     console.log(message);
+// });
 
 
-const getReservation = (rname, date, cb) => {
-    var data = [rname, date];
-    var sql = 'SELECT id, calendar_time, num_open_seats FROM reservations WHERE name = ? AND calendar_date = ?'
+const getReservation = (rname, date, timeLower, timeUpper, partySize, cb) => {
+    var data = [rname, date, partySize, timeLower, timeUpper];
+    var sql = 'SELECT id, calendar_time, num_open_seats FROM reservations WHERE name = ? AND calendar_date = ? AND num_open_seats >= ? AND calendar_time >= ? AND calendar_time <= ?'
     connection.query(sql, data, (err, results) => {
         if (err) return console.log(err);
         cb(null, results);

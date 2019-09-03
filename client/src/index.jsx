@@ -3,4 +3,4 @@ import ReactDOM from 'react-dom';
 import Reservation from './components/Reservation.jsx';
 
 
-ReactDOM.render(<Reservation />, document.getElementById('app'));
+ReactDOM.render(<Reservation path={window.location.pathname}/>, document.getElementById('app'));
