@@ -31,7 +31,7 @@ const generateReservations = (numOfMonths, cb) => {
                 // generate 30min interval slots
                 for (var k = time_opening; k < time_closing; k += .5) {
                     // generate random # open and reserved seats
-                    var num_reserved_seats = Math.floor(Math.random()*(max_seats*.15) + (max_seats*.85));
+                    var num_reserved_seats = Math.floor(Math.random()*(max_seats*.18) + (max_seats*.82));
                     var num_open_seats = max_seats - num_reserved_seats;
                     var timeMinute = time_hour_min[k * 10 % 2];
                     var time = Math.floor(k) + timeMinute;
@@ -49,31 +49,18 @@ const generateReservations = (numOfMonths, cb) => {
     const startDate = new Date('08/03/2019');
     var newDate = new Date(startDate);
     for (var x = 0; x < numOfMonths; x ++) {
-        new Date(newDate.setDate(newDate.getDate() + 30));
+        new Date(newDate.setDate(newDate.getDate() + 29));
         generateByMonth(newDate);
     }
 }
 
-// generateReservations(3, (err, message) => {
-//     if (err) return console.log(err);
-//     console.log(message);
-// });
+generateReservations(3, (err, message) => {
+    if (err) return console.log(err);
+    console.log(message);
+});
 
+connection.end((err) => {
+    if (err) return console.log(err);
+    console.log('disconnected from mysql')
+});
 
-const getReservation = (rname, date, timeLower, timeUpper, partySize, cb) => {
-    var data = [rname, date, partySize, timeLower, timeUpper];
-    var sql = 'SELECT id, calendar_time, num_open_seats FROM reservations WHERE name = ? AND calendar_date = ? AND num_open_seats >= ? AND calendar_time >= ? AND calendar_time <= ?'
-    connection.query(sql, data, (err, results) => {
-        if (err) return console.log(err);
-        cb(null, results);
-    });
-}
-
-// connection.end((err) => {
-//     if (err) return console.log(err);
-//     console.log('disconnected from mysql')
-// });
-
-module.exports = {
-    getReservation
-}
