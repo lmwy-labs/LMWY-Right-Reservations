@@ -46,6 +46,7 @@
     "eslint-plugin-react-hooks": "^1.7.0",
     "jest": "^24.9.0",
     "jest-styled-components": "^6.3.3",
+    "webfontloader": "^1.6.28",
     "webpack": "^2.7.0",
     "webpack-cli": "^3.3.7"
   },

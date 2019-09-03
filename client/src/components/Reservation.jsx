@@ -1,7 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import moment from 'moment';
+import $ from 'jquery';
 import Calendar from './Calendar.jsx';
+
+// import BrandonTextRegular from './fonts/BrandonText-Regular.otf';
+// import BrandonTextLight from './fonts/BrandonText-Light.otf';
+// import BrandonTextMedium from './fonts/BrandonText-Medium.otf';
+// import BrandonTextBold from './fonts/BrandonText-Bold.otf';
 
 /******************** STYLED COMPONENTS ********************/
 const ReserveForm = styled.div`
@@ -10,6 +16,7 @@ const ReserveForm = styled.div`
     background-color: white;
     box-shadow: 0px 0px 6px #BFBFBF;
     margin: 50px;
+    font-family: -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans';
 `;
 const FormTitle = styled.div`
     font-size: 19px;
@@ -99,7 +106,7 @@ const DateChooser = styled.div`
     background: url(https://cdn3.iconfinder.com/data/icons/iconano-text-editor/512/010-Down-512.png) no-repeat right;
     background-position-x: 97%;
     background-size: 10px;
-&:hover, active {
+&:hover, active, __hover {
     margin-bottom: 11px;
     border-bottom: 2px solid #da3743;
     cursor: pointer;
@@ -158,9 +165,17 @@ const FindTable = styled.button`
     font-size: 14px;
 &:hover, active {
     cursor: pointer;
+    opacity: .8;
 }
 `;
 FindTable.displayName = 'FindTable';
+const BookedNumTimes = styled.div`
+    margin-left: 18px;
+    margin-top: 15px;
+    font-weight: bold;
+    text-align: left;
+    font-size: 14px;
+`;
 
 /******************** ADDITIONAL FUNCTIONS ********************/
 const generateTimes = () => {
@@ -199,7 +214,7 @@ class Reservation extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            showCalendar: true,
+            showCalendar: false,
             partySize: 0,
             date: '',
             time: {},
@@ -208,7 +223,7 @@ class Reservation extends React.Component {
             currentMonth: '',
             currentYear: '',
             currentMonthDates: [],
-            selectedDate: 'Wed, 9/4'
+            selectedDate: 'Mon, 9/2'
         }
         this.calendar = React.createRef();
         this.handleClickOutside = this.handleClickOutside.bind(this);
@@ -222,6 +237,7 @@ class Reservation extends React.Component {
         this.closeCalendar = this.closeCalendar.bind(this);
         this.changePrevMonth = this.changePrevMonth.bind(this);
         this.changeNextMonth = this.changeNextMonth.bind(this);
+        this.findReservation = this.findReservation.bind(this);
     }
 
     handleClickOutside(event) {
@@ -232,8 +248,11 @@ class Reservation extends React.Component {
     componentDidMount() {
         var date = new Date;
         this.setState({
+            date: date.getFullYear() + '-' + (Number(date.getMonth())+1) + '-' + date.getDay(),
             currentMonth: date.getMonth(),
-            currentYear: date.getFullYear()
+            currentYear: date.getFullYear(),
+            time: '7:00 PM',
+            partySize: 4
         }, () => {
             this.generateMonth();
         });
@@ -291,6 +310,16 @@ class Reservation extends React.Component {
             this.generateMonth();
         })
     }
+    findReservation() {
+        var twentyFourTime = moment(this.state.time, ['h:m a', 'H:m']).format('HH:mm')
+        var timeLower = moment(this.state.time, ['h:m a', 'H:m']).subtract(2.5, 'hours').format('HH:mm')
+        var timeUpper = moment(this.state.time, ['h:m a', 'H:m']).add(2.5, 'hours').format('HH:mm')
+        var req = { partySize: this.state.partySize, date: this.state.date, time: twentyFourTime, timeLower: timeLower, timeUpper: timeUpper };
+        console.log(req)
+        $.get(`/api${this.props.path}reservations`, req, (data) => {
+            console.log('GET RESERVATIONS SUCCESS', data);
+        })
+    }
 
     render() {
         return (
@@ -333,8 +362,9 @@ class Reservation extends React.Component {
                                 ))}
                             </TimeSelect>
                         </DateTime>
-                        <FindTable>Find a Table</FindTable>
+                        <FindTable onClick={this.findReservation}>Find a Table</FindTable>
                     </ReservationForms>
+                    <BookedNumTimes>Booked 4 times today</BookedNumTimes>
                 </ReserveForm>
             </div>
         )

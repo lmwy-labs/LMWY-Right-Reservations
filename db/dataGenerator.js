@@ -52,15 +52,15 @@ const generateReservations = (numOfMonths, cb) => {
     }
 }
 
-generateReservations(3, (err, message) => {
-    if (err) return console.log(err);
-    console.log(message);
-});
+// generateReservations(3, (err, message) => {
+//     if (err) return console.log(err);
+//     console.log(message);
+// });
 
 
-const getReservation = (rname, date, cb) => {
-    var data = [rname, date];
-    var sql = 'SELECT id, calendar_time, num_open_seats FROM reservations WHERE name = ? AND calendar_date = ?'
+const getReservation = (rname, date, timeLower, timeUpper, cb) => {
+    var data = [rname, date, timeLower, timeUpper];
+    var sql = 'SELECT id, calendar_time, num_open_seats FROM reservations WHERE name = ? AND calendar_date = ? AND calendar_time BETWEEN ? AND ?'
     connection.query(sql, data, (err, results) => {
         if (err) return console.log(err);
         cb(null, results);

@@ -49,7 +49,7 @@ class Calendar extends React.Component {
         var month = Number(e.target.getAttribute('data')[2]) + 1;
         var day = e.target.innerHTML;
         var dayOfWeek = Number(e.target.getAttribute('data')[0]);
-        var date = '' + month + '/' + day + '/' + this.props.currentYear; 
+        var date = this.props.currentYear + '-' + month + '-' + day; 
         var label = '' + this.state.daysOfWeek[dayOfWeek] + ', ' + month + '/' + day;
         this.props.selectDate([date, month, label]);
         this.props.closeCalendar();

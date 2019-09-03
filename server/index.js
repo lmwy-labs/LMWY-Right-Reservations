@@ -6,13 +6,18 @@ const db = require('../db/dataGenerator.js');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
-app.use(express.static(__dirname + '/../public'));
+app.use('/restaurants/:rid', express.static(__dirname + '/../public'));
 
 // TEST API CALL
-app.get('/api/restaurants/r1', (req, res) => {
-    db.getReservation('r20', '2019-09-04', (err, data) => {
+app.get('/api/restaurants/:rid/reservations', (req, res) => {
+    var restaurant = req.params.rid;
+    var date = req.query.date;
+    var timeLower = req.query.timeLower;
+    var timeUpper = req.query.timeUpper;
+    db.getReservation(restaurant, date, timeLower, timeUpper, (err, data) => {
         if (err) return console.log(err);
-        res.send(data);
+        console.log(data);
+        res.send();
     });
 });
 
