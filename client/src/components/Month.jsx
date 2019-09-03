@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
+/******************** STYLED COMPONENTS ********************/
 const CalHeader = styled.div`
     text-align: center;
     font-weight: bold;
@@ -26,6 +27,7 @@ const NextMonth = styled(Button)`
     margin-left: 33px;
 `;
 
+/******************** REACT COMPONENT ********************/
 class Month extends React.Component {
     constructor(props) {
         super(props);
@@ -34,9 +36,9 @@ class Month extends React.Component {
     render() {
         return (
             <CalHeader>
-                <PrevMonth>&lt;</PrevMonth>
-                September 2019
-                <NextMonth>&gt;</NextMonth>
+                <PrevMonth onClick={this.props.changePrevMonth}>&lt;</PrevMonth>
+                {this.props.monthName} 2019
+                <NextMonth onClick={this.props.changeNextMonth}>&gt;</NextMonth>
             </CalHeader>
         )
     }
