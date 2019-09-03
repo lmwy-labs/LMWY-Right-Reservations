@@ -6,7 +6,7 @@ import September from '../../CalendarDummyData.js';
 
 /******************** STYLED COMPONENTS ********************/
 const ReserveForm = styled.div`
-    width: 264px;
+    width: 286px;
     height: 306px;
     background-color: white;
     box-shadow: 0px 0px 6px #BFBFBF;
@@ -61,6 +61,7 @@ const PartySelect = styled.select`
     background-position-x: 97%;
     background-size: 10px;
 &:hover, active {
+    margin-bottom: 11px;
     border-bottom: 2px solid #da3743;
     cursor: pointer;
 }
@@ -95,6 +96,7 @@ const DateChooser = styled.select`
     background-position-x: 97%;
     background-size: 10px;
 &:hover, active {
+    margin-bottom: 11px;
     border-bottom: 2px solid #da3743;
     cursor: pointer;
 }
@@ -119,6 +121,7 @@ const TimeSelect = styled.select`
     background-position-x: 97%;
     background-size: 10px;
 &:hover, active {
+    margin-bottom: 11px;
     border-bottom: 2px solid #da3743;
     cursor: pointer;
 }
@@ -126,7 +129,7 @@ const TimeSelect = styled.select`
 TimeSelect.displayName = 'TimeSelect';
 const CalPopup = styled.div`
     position: absolute;
-    margin-top: -12.5px;
+    margin-top: 39px;
     margin-left: 15px;
 `;
 const FindTable = styled.button`
@@ -162,6 +165,22 @@ const generateTimes = () => {
 }
 const reservationTimes = generateTimes();
 
+const generateMonthlyDates = (currentMonth, year) => {
+    const firstWeek = moment().month(currentMonth).startOf('month').week();
+    var calendarMonth = []
+    for(var week = firstWeek; week <= firstWeek + 5; week++) {
+        var weekdates = [];
+        for (var i = 0; i < 7; i ++) {
+            weekdates.push({
+                date: moment().week(week).startOf('week').clone().add(i, 'day').format('D'),
+                month: moment().week(week).startOf('week').clone().add(i, 'day').format('M') - 1
+            })
+        }
+        calendarMonth.push(weekdates);
+    }
+    return calendarMonth
+}
+
 /******************** REACT COMPONENT ********************/
 class Reservation extends React.Component {
     constructor(props) {
@@ -169,19 +188,39 @@ class Reservation extends React.Component {
         this.state = {
             showCalendar: false,
             partySize: 0,
-            partyArray: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],
             date: '',
             time: {},
-            timeArray: reservationTimes
+            partyArray: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20],
+            timeArray: reservationTimes,
+            currentMonth: '',
+            currentYear: '',
+            currentMonthDates: []
         }
         this.componentDidMount = this.componentDidMount.bind(this);
+        this.generateMonth = this.generateMonth.bind(this);
         this.selectPartySize = this.selectPartySize.bind(this);
         this.selectDate = this.selectDate.bind(this);
         this.selectTime = this.selectTime.bind(this);
         this.showCalendar = this.showCalendar.bind(this);
+        this.changePrevMonth = this.changePrevMonth.bind(this);
+        this.changeNextMonth = this.changeNextMonth.bind(this);
     }
 
     componentDidMount() {
+        var date = new Date;
+        this.setState({
+            currentMonth: date.getMonth(),
+            currentYear: date.getFullYear()
+        }, () => {
+            this.generateMonth();
+        });
+    }
+
+    generateMonth() {
+        const dates = generateMonthlyDates(this.state.currentMonth, this.state.currentYear);
+        this.setState({
+            currentMonthDates: dates
+        })
     }
 
     selectPartySize(e) {
@@ -191,7 +230,8 @@ class Reservation extends React.Component {
     }
     selectDate(date) {
         this.setState({
-            date: date
+            date: date[0],
+            selectedDate: date[1]
         })
     }
     selectTime(e) {
@@ -204,6 +244,22 @@ class Reservation extends React.Component {
             showCalendar: !state.showCalendar
         }))
     }
+    changePrevMonth() {
+        this.setState({
+            currentMonth: this.state.currentMonth - 1
+        }, () => {
+            this.generateMonth();
+        });
+    }
+
+    changeNextMonth() {
+        this.setState({
+            currentMonth: this.state.currentMonth + 1
+        }, () => {
+            this.generateMonth();
+        })
+    }
+
 
     render() {
         return (
@@ -232,15 +288,19 @@ class Reservation extends React.Component {
                                 Time
                             </DateTimeLabel>
                         </DateTime>
-                        <DateChooser onClick={this.showCalendar}></DateChooser>
-                            <CalPopup>
-                                {this.state.showCalendar ? <Calendar selectDate={this.selectDate} calendarDates={September}/> : null}
-                            </CalPopup>
-                        <TimeSelect value={this.state.time} onChange={this.selectTime}>
-                            {this.state.timeArray.map((time, i) => (
-                                <option key={i} value={time}>{time}</option>
-                            ))}
-                        </TimeSelect>
+                        <DateTime>
+
+                            <DateChooser onClick={this.showCalendar}></DateChooser>
+                                <option></option>
+                                <CalPopup ref={(node) => this.setWrapperRef = node}>
+                                    {this.state.showCalendar ? <Calendar changeNextMonth={this.changeNextMonth} changePrevMonth={this.changePrevMonth} currentMonthDates={this.state.currentMonthDates} currentMonth={this.state.currentMonth} currentYear={this.state.currentMonth}  showCalendar={this.showCalendar} selectDate={this.selectDate}/> : null}
+                                </CalPopup>
+                            <TimeSelect value={this.state.time} onChange={this.selectTime}>
+                                {this.state.timeArray.map((time, i) => (
+                                    <option key={i} value={time}>{time}</option>
+                                ))}
+                            </TimeSelect>
+                        </DateTime>
                         <FindTable>Find a Table</FindTable>
                     </ReservationForms>
                 </ReserveForm>
