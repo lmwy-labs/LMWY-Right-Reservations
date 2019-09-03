@@ -199,7 +199,7 @@ class Reservation extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            showCalendar: false,
+            showCalendar: true,
             partySize: 0,
             date: '',
             time: {},
@@ -226,7 +226,6 @@ class Reservation extends React.Component {
 
     handleClickOutside(event) {
         if (!this.calendar.current.contains(event.target)) {
-            console.log('outside event')
             this.closeCalendar();
         }
     }      
@@ -257,7 +256,10 @@ class Reservation extends React.Component {
     selectDate(date) {
         this.setState({
             date: date[0],
-            selectedDate: date[1]
+            currentMonth: date[1] - 1,
+            selectedDate: date[2]
+        }, () => {
+            this.generateMonth();
         })
     }
     selectTime(e) {

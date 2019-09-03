@@ -39,19 +39,20 @@ class Calendar extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            daysOfWeek: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
             monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ]
         };
        this.dateOnClick = this.dateOnClick.bind(this);
     }
 
     dateOnClick(e) {
-        var date = '' + (this.state.currentMonth + 1) + '/' + e.target.innerHTML + '/' + this.state.currentYear; 
-        // console.log(date);
-        console.log(e.target.value)
-        console.log(e.target.innerHTML)
-        
-        this.props.selectDate([date, 'Wed, 9/24']);
-        // this.props.closeCalendar();
+        var month = Number(e.target.getAttribute('data')[2]) + 1;
+        var day = e.target.innerHTML;
+        var dayOfWeek = Number(e.target.getAttribute('data')[0]);
+        var date = '' + month + '/' + day + '/' + this.props.currentYear; 
+        var label = '' + this.state.daysOfWeek[dayOfWeek] + ', ' + month + '/' + day;
+        this.props.selectDate([date, month, label]);
+        this.props.closeCalendar();
     }
 
     render() {
@@ -62,25 +63,19 @@ class Calendar extends React.Component {
                     <Table>
                         <thead>
                             <Tr>
-                            <td>Sun</td>
-                            <td>Mon</td>
-                            <td>Tue</td>
-                            <td>Wed</td>
-                            <td>Thu</td>
-                            <td>Fri</td>
-                            <td>Sat</td>
+                                {this.state.daysOfWeek.map((day, i) => <td key={i}>{day}</td> )}
                             </Tr>
                         </thead>
                         <tbody>
                             {this.props.currentMonthDates.map((week, i) => 
-                               <tr key={i} onClick={this.dateOnClick} onMouseOver={this.dateHover}>
-                                    <Td style={{ background: week[0].month != this.props.currentMonth ? '#f1f2f4' : 'white'}}>{week[0].date}</Td>
-                                    <Td style={{ background: week[1].month != this.props.currentMonth ? '#f1f2f4' : 'white'}}>{week[1].date}</Td>
-                                    <Td style={{ background: week[2].month != this.props.currentMonth ? '#f1f2f4' : 'white'}}>{week[2].date}</Td>
-                                    <Td style={{ background: week[3].month != this.props.currentMonth ? '#f1f2f4' : 'white'}}>{week[3].date}</Td>
-                                    <Td style={{ background: week[4].month != this.props.currentMonth ? '#f1f2f4' : 'white'}}>{week[4].date}</Td>
-                                    <Td style={{ background: week[5].month != this.props.currentMonth ? '#f1f2f4' : 'white'}}>{week[5].date}</Td>
-                                    <Td style={{ background: week[6].month != this.props.currentMonth ? '#f1f2f4' : 'white'}}>{week[6].date}</Td>
+                               <tr key={i} onMouseOver={this.dateHover} onClick={this.dateOnClick}>
+                                    <Td data={[0, week[0].month]} style={{ background: week[0].month != this.props.currentMonth ? '#f1f2f4' : 'white'}}>{week[0].date}</Td>
+                                    <Td data={[1, week[1].month]} style={{ background: week[1].month != this.props.currentMonth ? '#f1f2f4' : 'white'}}>{week[1].date}</Td>
+                                    <Td data={[2, week[2].month]} style={{ background: week[2].month != this.props.currentMonth ? '#f1f2f4' : 'white'}}>{week[2].date}</Td>
+                                    <Td data={[3, week[3].month]} style={{ background: week[3].month != this.props.currentMonth ? '#f1f2f4' : 'white'}}>{week[3].date}</Td>
+                                    <Td data={[4, week[4].month]} style={{ background: week[4].month != this.props.currentMonth ? '#f1f2f4' : 'white'}}>{week[4].date}</Td>
+                                    <Td data={[5, week[5].month]} style={{ background: week[5].month != this.props.currentMonth ? '#f1f2f4' : 'white'}}>{week[5].date}</Td>
+                                    <Td data={[6, week[6].month]} style={{ background: week[6].month != this.props.currentMonth ? '#f1f2f4' : 'white'}}>{week[6].date}</Td>
                                 </tr>
                             )}
                         </tbody>
@@ -90,5 +85,23 @@ class Calendar extends React.Component {
         )
     }
 }
+
+
+// <DateWeek key={i} week={week} dateHover={this.dateHover} dateOnClick={this.dateOnClick} />
+
+
+// var DateWeek = (props) => (
+//     <tr onMouseOver={props.dateHover}>
+//         {props.week.map((day, j) =>   
+//             <DateDay key={j} day={day} dateOnClick={props.dateOnClick}/>
+//         )}
+//     </tr>
+// );
+
+// var DateDay = (props) => (
+//     <Td onClick={props.dateOnClick}>
+//         {props.day.date}
+//     </Td>
+// );
 
 export default Calendar;
