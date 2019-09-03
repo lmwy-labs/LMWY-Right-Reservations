@@ -12,12 +12,13 @@ app.use('/restaurants/:rid', express.static(__dirname + '/../public'));
 app.get('/api/restaurants/:rid/reservations', (req, res) => {
     var restaurant = req.params.rid;
     var date = req.query.date;
-    var timeLower = req.query.timeLower;
-    var timeUpper = req.query.timeUpper;
-    db.getReservation(restaurant, date, timeLower, timeUpper, (err, data) => {
+    var timeLowerSmall = req.query.timeLower;
+    var timeUpperSmall = req.query.timeUpper;
+    var partySize = req.query.partySize;
+    db.getReservation(restaurant, date, timeLowerSmall, timeUpperSmall, partySize, (err, data) => {
         if (err) return console.log(err);
-        console.log(data);
-        res.send();
+        console.log(data)
+        res.send(data);
     });
 });
 

@@ -176,6 +176,23 @@ const BookedNumTimes = styled.div`
     text-align: left;
     font-size: 14px;
 `;
+const Bookings = styled.div`
+    margin-left: 18px;
+    display: flex;
+    width: 95%;
+    align-self: center;
+`;
+const BookingTime = styled.div`
+    margin-right: 10px;
+    padding: 10px;
+    border-radius: 3%;
+    background-color: #da3743;
+    color: white;
+    font-size: 14px;
+&:hover {
+    opacity: 0.8;
+}
+`;
 
 /******************** ADDITIONAL FUNCTIONS ********************/
 const generateTimes = () => {
@@ -215,6 +232,8 @@ class Reservation extends React.Component {
         super(props);
         this.state = {
             showCalendar: false,
+            showBookings: false,
+            bookings: ['6:30 PM', '7:00 PM', '7:30 PM'],
             partySize: 0,
             date: '',
             time: {},
@@ -312,12 +331,17 @@ class Reservation extends React.Component {
     }
     findReservation() {
         var twentyFourTime = moment(this.state.time, ['h:m a', 'H:m']).format('HH:mm')
-        var timeLower = moment(this.state.time, ['h:m a', 'H:m']).subtract(2.5, 'hours').format('HH:mm')
-        var timeUpper = moment(this.state.time, ['h:m a', 'H:m']).add(2.5, 'hours').format('HH:mm')
+        var timeLower = moment(this.state.time, ['h:m a', 'H:m']).subtract(1.5, 'hours').format('HH:mm')
+        var timeUpper = moment(this.state.time, ['h:m a', 'H:m']).add(1.5, 'hours').format('HH:mm')
         var req = { partySize: this.state.partySize, date: this.state.date, time: twentyFourTime, timeLower: timeLower, timeUpper: timeUpper };
-        console.log(req)
         $.get(`/api${this.props.path}reservations`, req, (data) => {
-            console.log('GET RESERVATIONS SUCCESS', data);
+            var times = [];
+            data.forEach((res) => times.push(moment(res.calendar_time, ['HH:mm:ss']).format('h:mm A')));
+            console.log(data)
+            this.setState({
+                showBookings: true,
+                bookings: times
+            })
         })
     }
 
@@ -362,9 +386,12 @@ class Reservation extends React.Component {
                                 ))}
                             </TimeSelect>
                         </DateTime>
-                        <FindTable onClick={this.findReservation}>Find a Table</FindTable>
+                        {this.state.showBookings ? null : <FindTable onClick={this.findReservation}>Find a Table</FindTable>}
+                        {this.state.showBookings ? null : <BookedNumTimes>Booked 4 times today</BookedNumTimes>}
                     </ReservationForms>
-                    <BookedNumTimes>Booked 4 times today</BookedNumTimes>
+                    <Bookings>
+                        {this.state.showBookings ? this.state.bookings.map((time, i) => <BookingTime key={i}>{time}</BookingTime>) : null }
+                    </Bookings>
                 </ReserveForm>
             </div>
         )
