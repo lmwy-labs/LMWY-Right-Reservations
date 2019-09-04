@@ -362,8 +362,8 @@ class Reservation extends React.Component {
         var timeLower = moment(this.state.time, ['h:m a', 'H:m']).subtract(1.25, 'hours').format('HH:mm')
         var timeUpper = moment(this.state.time, ['h:m a', 'H:m']).add(1.25, 'hours').format('HH:mm')
         var req = { partySize: this.state.partySize, date: this.state.date, time: twentyFourTime, timeLower: timeLower, timeUpper: timeUpper };
-        console.log(req);
-        $.get(`/api${this.props.path}reservations`, req, (data) => {
+        $.get(`http://localhost:3003/api${window.location.pathname}reservations`, req, (data) => {
+            console.log('SUCCESS GET REQUEST')
             var times = [];
             data.forEach((res) => times.push(moment(res.calendar_time, ['HH:mm:ss']).format('h:mm A')));
             this.setState({
@@ -431,4 +431,5 @@ class Reservation extends React.Component {
     }
 }
 
+window.Reservation = Reservation;
 export default Reservation;
