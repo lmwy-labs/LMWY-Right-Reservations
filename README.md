@@ -1,8 +1,6 @@
-# Project Name
+# Reservation System
 
-> Project description
-Booking reservation system for Open Table Mock Site.
-Allow users to select a date from a calendar, which will show available reservation times on that day.
+> System for booking a calendar event by time. Allow users to select a date from a calendar, which will show available reservation times on that day.
 
 ## Related Projects
 
