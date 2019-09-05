@@ -18,7 +18,19 @@ Allow users to select a date from a calendar, which will show available reservat
 
 ## Usage
 
-> Some usage instructions
+Install node modules using npm install.
+
+Initialize MySQL schema and generate dummy data for 100 restaurants.
+```sh
+npm run sql
+npm run seed
+```
+
+Launch webpack and host server.
+```sh
+npm run build:dev
+npm run start:dev
+```
 
 ## Requirements
 
@@ -34,7 +46,6 @@ An `nvmrc` file is included if using [nvm](https://github.com/creationix/nvm).
 From within the root directory:
 
 ```sh
-npm install -g webpack
 npm install
 ```
 
