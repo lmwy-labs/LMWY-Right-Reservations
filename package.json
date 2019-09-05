@@ -11,7 +11,7 @@
     "build:dev": "webpack -d --watch",
     "start": "node server/index.js",
     "start:dev": "nodemon server/index.js -w server -w database-mysql",
-    "sql": "mysql -uroot < schema.sql",
+    "sql": "mysql -uroot < db/schema.sql",
     "seed": "node db/dataGenerator.js",
     "test": "jest --coverage"
   },
