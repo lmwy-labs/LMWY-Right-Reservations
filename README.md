@@ -32,6 +32,8 @@ npm run build:dev
 npm run start:dev
 ```
 
+This component uses port 3003, with the global component name Reservation.
+
 ## Requirements
 
 An `nvmrc` file is included if using [nvm](https://github.com/creationix/nvm).
