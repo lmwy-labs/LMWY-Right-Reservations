@@ -15,7 +15,6 @@
     "seed": "node db/dataGenerator.js",
     "test": "jest --coverage"
   },
-  "proxy": "http://localhost:3000",
   "dependencies": {
     "babel-plugin-styled-components": "^1.10.6",
     "body-parser": "^1.19.0",

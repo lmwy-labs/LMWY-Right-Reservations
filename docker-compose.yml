@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:5.7
+    # volumes:
+    #   - ./db:test/
+    environment:
+      MYSQL_DATABASE: 'opentable'
+      MYSQL_USER: 'root'
+      MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+
+  main:
+    build: '.'
+    depends_on:
+      - 'db'
+    ports: 
+      - '3003:3003'

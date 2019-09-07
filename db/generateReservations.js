@@ -1,10 +1,7 @@
 const mysql = require('mysql');
+const mysqlConfig = require('./config.js');
 
-const connection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    database: 'opentable'
-  });
+const connection = mysql.createConnection(mysqlConfig);
 
 connection.connect(function(err) {
     if (err) { return console.log('error mysql connection ' + err)}
