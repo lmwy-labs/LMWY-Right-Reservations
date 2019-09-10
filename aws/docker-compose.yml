@@ -9,7 +9,7 @@ services:
       MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
 
   main:
-    build: '.'
+    image: ezli/ot-right-reservations_main:booking
     depends_on:
       - 'db'
     ports: 

@@ -16,7 +16,6 @@ const ReserveForm = styled.div`
     background-color: white;
     box-shadow: 0px 0px 6px #BFBFBF;
     margin: 50px;
-    font-family: BrandTextRegular;
     font-family: -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans';
 `;
 const FormTitle = styled.div`

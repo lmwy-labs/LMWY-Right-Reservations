@@ -1,7 +1,10 @@
+const compression = require('compression');
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const db = require('../db/generateReservations.js');
+
+app.use(compression());
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
