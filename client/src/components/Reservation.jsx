@@ -361,7 +361,7 @@ class Reservation extends React.Component {
         var timeLower = moment(this.state.time, ['h:m a', 'H:m']).subtract(1.25, 'hours').format('HH:mm')
         var timeUpper = moment(this.state.time, ['h:m a', 'H:m']).add(1.25, 'hours').format('HH:mm')
         var req = { partySize: this.state.partySize, date: this.state.date, time: twentyFourTime, timeLower: timeLower, timeUpper: timeUpper };
-        $.get(`http://ec2-18-221-38-145.us-east-2.compute.amazonaws.com:3003/api${window.location.pathname}reservations`, req, (data) => {
+        $.get(`http://localhost:3003/api${window.location.pathname}reservations`, req, (data) => {
             var times = [];
             data.forEach((res) => times.push(moment(res.calendar_time, ['HH:mm:ss']).format('h:mm A')));
             this.setState({

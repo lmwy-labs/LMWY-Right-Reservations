@@ -10,9 +10,10 @@
 
 ## Table of Contents
 
-1. [Usage](#Usage)
-1. [Requirements](#requirements)
-1. [Development](#development)
+1. [Usage](##1. Usage)
+2. [Requirements](# 2.Requirements)
+3. [Development](#3. Development)
+4. [CRUD APIs](#4. CRUD APIs)
 
 ## Usage
 
@@ -32,14 +33,14 @@ npm run start:dev
 
 This component uses port 3003, with the global component name Reservation.
 
-## Requirements
+## 2. Requirements
 
 An `nvmrc` file is included if using [nvm](https://github.com/creationix/nvm).
 
 - Node 6.13.0
 - etc
 
-## Development
+## 3. Development
 
 ### Installing Dependencies
 
@@ -49,3 +50,68 @@ From within the root directory:
 npm install
 ```
 
+## 4. CRUD APIs
+
+### Create a new item
+Creates a new reservation for the given restaurant name, date, time, and number of people.
+
+POST /api/restaurants/:rid/reservations.
+
+#### Sample input:
+```json
+{
+  "calendar_date": "2019-09-02",  // date
+  "calendar_time": "13:00:00",    // time
+  "num_reserved_seats": 3,        // number
+}
+```
+#### Returns
+Returns the created reservation object if successful.
+
+---
+### Retrieve a reservation
+Retrieves a list of available reservations times for the given restaurant name, date, time, and number of people.
+
+GET /api/restaurants/:rid/reservations
+
+#### Sample input:
+```json
+{
+  "calendar_date": "2019-09-02",  // date
+  "calendar_time": "13:00:00",    // time
+  "num_reserved_seats": 3,        // number
+}
+```
+#### Returns
+Returns the reservation object if successful.
+
+---
+### Update an existing reservation
+Updates an existing reservation's party size for the given restaurant name. Provide either the date, time, or number of people to update. Provide one or all of the fields to update.
+
+PUT /api/restaurants/:rid/reservations
+```json
+{
+  "calendar_date": "2019-09-02",  // date
+  "calendar_time": "13:00:00",    // time
+  "num_reserved_seats": 3,        // number
+}
+```
+
+#### Returns
+Returns the updated reservation object if successful.
+
+---
+### Delete / DELETE - delete an item
+Deletes the reservation given the restaurant name, reservation date, and time.
+
+DELETE /api/restaurants/:rid/reservations
+```json
+{
+  "calendar_date": "2019-09-02",  // date
+  "calendar_time": "13:00:00",    // time
+}
+```
+
+#### Returns
+Returns a success message string if successful.

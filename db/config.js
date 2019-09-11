@@ -1,5 +1,5 @@
 module.exports = {
-    host: 'db',
+    host: 'localhost',
     database: 'opentable',
     user: 'root'
 }
