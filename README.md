@@ -60,9 +60,9 @@ POST /api/restaurants/:rid/reservations.
 #### Sample input:
 ```json
 {
-  "calendar_date": "2019-09-02",  // date
-  "calendar_time": "13:00:00",    // time
-  "num_reserved_seats": 3,        // number
+  "calendar_date": "2019-09-02",
+  "calendar_time": "13:00:00",
+  "num_reserved_seats": 3,
 }
 ```
 #### Returns
@@ -77,9 +77,9 @@ GET /api/restaurants/:rid/reservations
 #### Sample input:
 ```json
 {
-  "calendar_date": "2019-09-02",  // date
-  "calendar_time": "13:00:00",    // time
-  "num_reserved_seats": 3,        // number
+  "calendar_date": "2019-09-02",
+  "calendar_time": "13:00:00",
+  "num_reserved_seats": 3,
 }
 ```
 #### Returns
@@ -92,9 +92,9 @@ Updates an existing reservation's party size for the given restaurant name. Prov
 PUT /api/restaurants/:rid/reservations
 ```json
 {
-  "calendar_date": "2019-09-02",  // date
-  "calendar_time": "13:00:00",    // time
-  "num_reserved_seats": 3,        // number
+  "calendar_date": "2019-09-02",
+  "calendar_time": "13:00:00",
+  "num_reserved_seats": 3,
 }
 ```
 
@@ -108,8 +108,8 @@ Deletes the reservation given the restaurant name, reservation date, and time.
 DELETE /api/restaurants/:rid/reservations
 ```json
 {
-  "calendar_date": "2019-09-02",  // date
-  "calendar_time": "13:00:00",    // time
+  "calendar_date": "2019-09-02",
+  "calendar_time": "13:00:00",
 }
 ```
 
