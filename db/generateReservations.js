@@ -1,69 +1,152 @@
-const mysql = require('mysql');
 const mysqlConfig = require('./config.js');
-const moment = require('moment');
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
-const connection = mysql.createConnection(mysqlConfig);
+const sequelize = new Sequelize(
+  mysqlConfig.database, // db
+  mysqlConfig.user, // user
+  null, // pw
+  {
+    dialect: 'mysql',
+    host: mysqlConfig.host,
+    port: "3306",
+  }
+);
 
-connection.connect(function(err) {
-  if (err) { return console.log('error mysql connection ' + err)}
-  console.log('connected to mysql');
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log('Connection has been established successfully.');
+  })
+  .catch(err => {
+    console.error('Unable to connect to the database:', err);
+  });
+
+const Reservations = sequelize.define('reservations', {
+  id: 
+  {
+    type: Sequelize.INTEGER,
+    allowNull: false,
+    autoIncrement: true,
+    primaryKey: true
+  },
+  name:
+  {
+    type: Sequelize.STRING,
+    defaultValue: function() {
+      return 'default';
+    },
+  },
+  time_opening:
+  {
+    type: Sequelize.TIME,
+    defaultValue: function() {
+      const time_hour_min = [0, .3];
+      return Math.floor(Math.random()*(19-11)+11) + time_hour_min[Math.floor(Math.random()*2)];
+    },
+  },
+  time_closing:
+  {
+    type: Sequelize.TIME,
+    defaultValue: function() {
+      const time_hour_min = [0, .3];
+      return Math.floor(Math.random()*(19-11)+11) + time_hour_min[Math.floor(Math.random()*2)];
+    },
+  },
+  calendar_date:
+  {
+    type: Sequelize.DATEONLY,
+  },
+  calendar_time:
+  {
+    type: Sequelize.TIME,
+  },
+  num_open_seats:
+  {
+    type: Sequelize.INTEGER,
+    defaultValue: function() {
+      return Math.floor(Math.random()*(100-30)+30);
+    },
+  },
+  num_reserved_seats:
+  {
+    type: Sequelize.INTEGER,
+    defaultValue: function() {
+      return Math.floor(Math.random()*10);
+    },
+  },
+}, {
+  timestamps: false
 });
 
 const createReservation = (restaurant, timeOpening, timeClosing, reservationDate, reservationTime, reservedSeats, cb) => {
-  reservationDate = moment(reservationDate).format('YYYY-MM-DD');
-  timeOpening = moment(timeOpening).utc().format('HH:MM:SS');
-  timeClosing = moment(timeClosing).utc().format('HH:MM:SS');
-  reservationTime = moment(reservationTime).utc().format('HH:MM:SS');
-  
-  var data = [restaurant, timeOpening, timeClosing, reservationDate, reservationTime, 10, reservedSeats];
-  var sql = "INSERT INTO reservations (name, time_opening, time_closing, calendar_date, calendar_time, num_open_seats, num_reserved_seats) \
-              VALUES ?,?,?,?,?,?,?";
-  connection.query(sql, data, (err, results) => {
-      if (err) return console.log(err);
-      cb(null, results);
-  });
+  sequelize.sync()
+    .then(() => Reservations.create({
+      "name": restaurant,
+      "time_opening": timeOpening,
+      "time_closing": timeClosing,
+      "calendar_date": reservationDate,
+      "calendar_time": reservationTime,
+      "num_reserved_seats": reservedSeats,
+    }))
+    .then(result => {
+      cb(null, result);
+    })
+    .catch(err => cb(err));
 };
 
 const getReservation = (rname, date, timeLower, timeUpper, partySize, cb) => {
-  var data = [rname, date, partySize, timeLower, timeUpper];
-  var sql = 'SELECT calendar_time FROM reservations WHERE name = ? AND calendar_date = ? AND \
-              num_open_seats >= ? AND calendar_time >= ? AND calendar_time <= ? ORDER BY calendar_time ASC'
-  connection.query(sql, data, (err, results) => {
-    if (err) return console.log(err);
-    cb(null, results);
-  });
+  sequelize.sync()
+    .then(() => {
+      Reservations.findAll({ 
+        where: { 
+          name: rname,
+          calendar_date: reservationDate,
+          calendar_time: reservationTime,
+          num_open_seats: { [Op.gte]: partySize, },
+          calendar_time: { [Op.gte]: timeLower, },
+          calendar_time: { [Op.lte]: timeUpper, },
+        },
+        order: [ [ 'calendar_time', 'ASC' ] ],
+    })
+      .then(record => {
+        record.update({ num_reserved_seats: partySize, })
+      })
+    })
+    .then(result => {
+      cb(null, result);
+    })
+    .catch(err => cb(err));
 };
 
-const updateReservation = (rname, reservationDate, reservationTime, reservedSeats) => {
-  filter = [rname, reservationDate, reservationTime, reservedSeats];
-  sql = `UPDATE reservations SET num_reserved_seats = ? WHERE name = ?, calendar_date = ? and calendar_time = ?`;
-  connection.query(sql, filter, (err, results) => {
-    if (err) return console.log(err);
-    cb(null, results);
-});
+const updateReservation = (rname, reservationDate, reservationTime, partySize, cb) => {
+  sequelize.sync()
+    .then(() => {
+      Reservations.findOne({ where: { name: rname, calendar_date: reservationDate, calendar_time: reservationTime, } })
+      .then(record => {
+        record.update({ num_reserved_seats: partySize, })
+      })
+    })
+    .then(result => {
+      cb(null, result);
+    })
+    .catch(err => cb(err));
 };
 
-const deleteReservation = (rname, reservationDate, reservationTime) => {
-  sql = `DELETE FROM reservations WHERE name = ?, calendar_date = ? and calendar_time = ?`;
-  filter = [rname, reservationDate, reservationTime];
-  connection.query(sql, filter, (err, results) => {
-    if (err) return console.log(err);
-    cb(null, results);
-});
-};
-
-const getRestaurantInfo = (rname, cb) => {
-  var sql = 'SELECT time_opening, time_closing FROM reservations where name = ?'
-  connection.query(sql, rname, (err, results) => {
-      if (err) return console.log(err);
-      cb(null, results);
-  });
+const deleteReservation = (rname, reservationDate, reservationTime, cb) => {
+  sequelize.sync()
+    .then(() => {
+      Reservations.destroy({ where: { name: rname, calendar_date: reservationDate, calendar_time: reservationTime, } })
+    })
+    .then(result => {
+      cb(null, result);
+    })
+    .catch(err => cb(err));
 };
 
 module.exports = {
   createReservation,
   getReservation,
-  getRestaurantInfo,
   updateReservation,
   deleteReservation,
 }

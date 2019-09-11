@@ -99,7 +99,7 @@ PUT /api/restaurants/:rid/reservations
 ```
 
 #### Returns
-Returns the updated reservation object if successful.
+Returns sucess message if successful.
 
 ---
 ### Delete / DELETE - delete an item
@@ -114,4 +114,4 @@ DELETE /api/restaurants/:rid/reservations
 ```
 
 #### Returns
-Returns a success message string if successful.
+Returns sucess message if successful.
