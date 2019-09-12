@@ -37,10 +37,6 @@ const generateReservations = (numOfMonths, cb) => {
                 }
             }
         }
-        connection.query({ sql: 'INSERT INTO reservations (name, time_opening, time_closing, calendar_date, calendar_time, num_open_seats, num_reserved_seats) VALUES ?', values: [reservations] }, (err, results, fields) => {
-            if (err) return console.log(err);
-            cb(null, 'Generated Reservations');
-        });
     }
 
     const startDate = new Date('08/03/2019');

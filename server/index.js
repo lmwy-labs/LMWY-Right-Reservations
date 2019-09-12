@@ -2,7 +2,7 @@ const compression = require('compression');
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-const db = require('../db/generateReservations.js');
+const db = require('../db/dbHelpers.js');
 
 app.use(compression());
 
