@@ -1,11 +1,3 @@
-DROP DATABASE IF EXISTS opentable;
-
-CREATE DATABASE opentable;
-
-USE opentable;
-
-DROP TABLE IF EXISTS `reservations`;
-
 CREATE TABLE `restaurants` (
   `id` INTEGER NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(50) NOT NULL,

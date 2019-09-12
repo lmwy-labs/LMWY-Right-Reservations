@@ -51,7 +51,7 @@ PUT /api/restaurants/1/reserve
 Returns sucess message if successful.
 
 ---
-### Delete / DELETE - delete an item
+### Delete an item
 Deletes the reservation given the restaurant name, reservation date, and time.
 
 DELETE /api/restaurants/:restaurantId/reserve
