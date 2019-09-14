@@ -30,7 +30,8 @@ const createRestaurants = (n, writer, encoding, callback) => {
   }
   write();
 }
-// 10000000
+
 createRestaurants(10000000, ws, 'utf-8', () => {
   ws.end();
 });
+

@@ -16,7 +16,7 @@ const createRestaurant = (id) => {
   let open_time = ('0' + randomInt(8, 11)).slice(-2) + ':00'
   let close_time = randomInt(16, 23) + ':00';
   let capacity_per_slot = randomInt(20, 100).toString();
-  return `${name}, ${open_time}, ${close_time}, ${capacity_per_slot}`;
+  return `${name}, ${open_time}, ${close_time}, ${capacity_per_slot}\n`;
 };
 
 module.exports = {
