@@ -1,27 +1,14 @@
-CREATE TABLE `restaurants` (
-  `id` INTEGER NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(50) NOT NULL,
-  `time_opening` TIME NOT NULL,
-  `time_closing` TIME NOT NULL,
-  `total_capacity` INTEGER NOT NULL,
-  PRIMARY KEY (`id`)
-);
+{
+  "restaurant_name": "Taco Bell",
+  "dateTime": "2019-09-12 19:00:00",
+  "reservations": [
+    {
+      "reservation_datetime": "2019-09-12 19:00:00",
+      "reservation_datetime": "2019-09-12 19:00:00",
+    }
+  ]
+}
 
-CREATE TABLE `reservations` (
-  `id` INTEGER NOT NULL AUTO_INCREMENT,
-  `restaurant_id` INTEGER NOT NULL,
-  `reservation_date` DATE NOT NULL,
-  `reservation_time` TIME NOT NULL,
-  `party_size` INTEGER NOT NULL,
-  PRIMARY KEY (`id`),
-  FOREIGN KEY (`restaurant_id`) REFERENCES `restaurants` (`id`)
-);
 
-CREATE TABLE `restaurant_capacity` (
-  `id` INTEGER NOT NULL AUTO_INCREMENT,
-  `time_block` DATE NOT NULL,
-  `reservation_time` TIME NOT NULL,
-  `time_block_capacity` INTEGER NOT NULL,
-  `time_block_available` INTEGER NOT NULL,
-  PRIMARY KEY (`id`)
-);
+// reservations - id, datetime, party
+// restaurants - name, open, close
