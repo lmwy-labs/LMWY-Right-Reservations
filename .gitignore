@@ -24,3 +24,5 @@ coverage
 build/
 dist/
 db/csv/
+db/postgres/config.js
+db/mongo/config.js

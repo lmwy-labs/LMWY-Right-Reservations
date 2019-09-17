@@ -23,3 +23,5 @@ CREATE TABLE reservations (
   reservation_datetime TIMESTAMP NOT NULL,
   seats SMALLINT NOT NULL
 );
+
+-- ALTER TABLE reservations ADD CONSTRAINT fk_reservations FOREIGN KEY (restaurant_id) REFERENCES restaurants (id) MATCH FULL;

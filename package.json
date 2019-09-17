@@ -11,14 +11,13 @@
     "build": "webpack --mode production",
     "build:dev": "webpack -d --watch",
     "start": "node server/index.js",
-    "start:dev": "nodemon server/index.js -w server -w database-mysql",
-    "sql": "mysql -uroot < db/schema.sql",
-    "seed": "node db/dataGenerator.js",
+    "start:dev": "nodemon server/index.js",
     "test": "jest --coverage"
   },
   "dependencies": {
     "axios": "^0.19.0",
     "babel-plugin-styled-components": "^1.10.6",
+    "bluebird": "^3.5.5",
     "body-parser": "^1.19.0",
     "compression": "^1.7.4",
     "csv-write-stream": "^2.0.0",

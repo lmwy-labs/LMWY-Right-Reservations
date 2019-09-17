@@ -1,14 +1,19 @@
+// restaurants
 {
-  "restaurant_name": "Taco Bell",
-  "dateTime": "2019-09-12 19:00:00",
-  "reservations": [
-    {
-      "reservation_datetime": "2019-09-12 19:00:00",
-      "reservation_datetime": "2019-09-12 19:00:00",
-    }
-  ]
+  "_id": "5d800b2df609b06d498cd727"
+  "restaurant_name": "r1",
+  "open_time": "09:00:00",
+  "close_time": "17:00:00",
+  "capacity_per_slot": "100"
 }
 
+// reservations
+{
+  "_id": "5d800b2df609b06d498cd730",
+  "rName": "r1",
+  "dateTime": "2019-09-12 19:00:00",
+  "seats": 3
+}
 
-// reservations - id, datetime, party
-// restaurants - name, open, close
+// mongoimport -d opentable -c restaurants --type csv --file ./db/csv/restaurants.csv --fields name,open_time,close_time,capacity_per_slot
+// mongoimport -d opentable -c reservations --type csv --file ./db/csv/reservations.csv --fields restaurant_id,reservation_datetime,seats
