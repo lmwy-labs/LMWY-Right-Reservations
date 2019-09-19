@@ -17,6 +17,7 @@ app.use((req, res, next) => {
 
 app.post('/api/restaurants/:restaurantId/reservations/', db.createReservation);
 app.get('/api/restaurants/:restaurantId/availability/', db.getAvailableTimes);
+app.get('/api/restaurants/:restaurantId/', db.getRestaurantInfo);
 app.patch('/api/restaurants/:restaurantId/reservations/:reservationId', db.updateReservation);
 app.delete('/api/restaurants/:restaurantId/reservations/:reservationId/', db.deleteReservation);
 

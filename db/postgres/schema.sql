@@ -20,7 +20,7 @@ CREATE TABLE restaurants (
 CREATE TABLE reservations (
   id INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY,
   restaurant_id INTEGER NOT NULL, -- don't forget to add foreign-key constratin after seeding
-  reservation_datetime TIMESTAMP NOT NULL,
+  reservation_datetime TIMESTAMPTZ NOT NULL,
   seats SMALLINT NOT NULL
 );
 
